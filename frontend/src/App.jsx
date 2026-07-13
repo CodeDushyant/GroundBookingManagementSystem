@@ -11,7 +11,6 @@ function App() {
       <LandingPage />
       <Signup />
       <Login />
-      <Login />
       <UserDashboard />
       <MyBookings/>
       <Profile/>
