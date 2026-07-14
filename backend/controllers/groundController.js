@@ -15,7 +15,7 @@ exports.addGround = async (req, res) => {
 
       // if admin provides image use it else default image
       image:
-        image || "https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d",
+        image || "https://raw.githubusercontent.com/CodeDushyant/ImagesForDemo/refs/heads/main/photo-1750716413756-b66624b64ce4.avif",
     });
 
     res.status(201).json({
