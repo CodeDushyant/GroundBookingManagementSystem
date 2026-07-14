@@ -27,11 +27,11 @@ const Navbar = () => {
                 Home
               </Link>
               <Link to="/my-bookings" className="nav-link">
-                My Bookings
+                {user.role === "admin" ? "Bookings" : "My Bookings"}
               </Link>
               {user.role === "admin" && (
                 <Link to="/admin-dashboard" className="nav-link admin-link">
-                  Admin Dashboard
+                  Manage Ground
                 </Link>
               )}
               <div className="nav-user">

@@ -49,10 +49,12 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-header">
-        <div>
-          <h1>🏟️ Available Grounds</h1>
-          <p className="subtitle">Find and book the perfect sports ground</p>
-        </div>
+        {user && user.role === "user" && (
+          <div>
+            <h1>🏟️ Available Grounds</h1>
+            <p className="subtitle">Find and book the perfect sports ground</p>
+          </div>
+        )}
         {user && user.role === "admin" && (
           <Link to="/admin-dashboard" className="admin-quick-link">
             ⚙️ Manage Grounds
@@ -60,31 +62,33 @@ const Home = () => {
         )}
       </div>
 
-      <div className="filter-bar">
-        <div className="search-wrapper">
-          <input
-            type="text"
-            placeholder="🔍 Search by name or location..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
+      {user.role === "user" && (
+        <div className="filter-bar">
+          <div className="search-wrapper">
+            <input
+              type="text"
+              placeholder="🔍 Search by name or location..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          <div className="filter-wrapper">
+            <select
+              value={filterSport}
+              onChange={(e) => setFilterSport(e.target.value)}
+              className="filter-select"
+            >
+              <option value="">All Sports</option>
+              {sportTypes.map((sport) => (
+                <option key={sport} value={sport}>
+                  {sport}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="filter-wrapper">
-          <select
-            value={filterSport}
-            onChange={(e) => setFilterSport(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">All Sports</option>
-            {sportTypes.map((sport) => (
-              <option key={sport} value={sport}>
-                {sport}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+      )}
 
       {error && <div className="error-message">{error}</div>}
 
