@@ -15,7 +15,8 @@ exports.addGround = async (req, res) => {
 
       // if admin provides image use it else default image
       image:
-        image || "https://raw.githubusercontent.com/CodeDushyant/ImagesForDemo/refs/heads/main/photo-1750716413756-b66624b64ce4.avif",
+        image ||
+        "https://raw.githubusercontent.com/CodeDushyant/ImagesForDemo/refs/heads/main/photo-1750716413756-b66624b64ce4.avif",
     });
 
     res.status(201).json({
@@ -65,3 +66,26 @@ exports.deleteGround = async (req, res) => {
     });
   }
 };
+
+const getAdminGrounds = async (req, res) => {
+  try {
+    const { adminId } = req.params;
+
+    // Security check: Ensure the request params match the logged-in user
+    // (Optional: Depends if you are using middleware to protect this route)
+
+    const grounds = await Ground.find({ owner: adminId });
+
+    if (!grounds) {
+      return res
+        .status(404)
+        .json({ message: "No grounds found for this admin." });
+    }
+
+    res.status(200).json(grounds);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+module.exports = { getAdminGrounds };

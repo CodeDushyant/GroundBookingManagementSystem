@@ -17,11 +17,16 @@ const Home = () => {
     fetchGrounds();
   }, []);
 
+  // src/components/Home.jsx (sirf updated section)
   const fetchGrounds = async () => {
     setLoading(true);
     setError("");
     try {
-      const response = await api.get("/grounds");
+      // Logic: Agar admin hai, toh sirf uske grounds fetch karo
+      const endpoint =
+        user?.role === "admin" ? `grounds/admin/${user.id}` : "/grounds";
+
+      const response = await api.get(endpoint);
       setGrounds(response.data);
     } catch (err) {
       setError("Failed to load grounds. Please try again.");

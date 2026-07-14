@@ -11,5 +11,6 @@ router.post("/add", addGround);
 router.get("/", getAllGrounds);
 
 router.delete("/:id", deleteGround);
+router.get("/admin/:adminId", getAdminGrounds);
 
 module.exports = router;
