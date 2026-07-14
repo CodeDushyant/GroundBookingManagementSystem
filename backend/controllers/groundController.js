@@ -67,25 +67,16 @@ exports.deleteGround = async (req, res) => {
   }
 };
 
-const getAdminGrounds = async (req, res) => {
+exports.getAdminGrounds = async (req, res) => {
   try {
     const { adminId } = req.params;
 
-    // Security check: Ensure the request params match the logged-in user
-    // (Optional: Depends if you are using middleware to protect this route)
-
     const grounds = await Ground.find({ owner: adminId });
-
-    if (!grounds) {
-      return res
-        .status(404)
-        .json({ message: "No grounds found for this admin." });
-    }
 
     res.status(200).json(grounds);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
-
-module.exports = { getAdminGrounds };

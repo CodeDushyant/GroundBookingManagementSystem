@@ -4,6 +4,7 @@ const {
   addGround,
   getAllGrounds,
   deleteGround,
+  getAdminGrounds,
 } = require("../controllers/groundController");
 
 router.post("/add", addGround);
