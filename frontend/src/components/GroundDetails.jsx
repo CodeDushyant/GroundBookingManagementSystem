@@ -16,6 +16,8 @@ const GroundDetails = () => {
   const [bookingSuccess, setBookingSuccess] = useState("");
 
   const user = JSON.parse(localStorage.getItem("user") || "null");
+  // Check if the user is an admin
+  const isAdmin = user?.isAdmin === true || user?.role === "admin";
 
   useEffect(() => {
     fetchGroundDetails();
@@ -25,7 +27,6 @@ const GroundDetails = () => {
     setLoading(true);
     setError("");
     try {
-      // Since there's no single ground endpoint, we fetch all and filter
       const response = await api.get("/grounds");
       const found = response.data.find((g) => g._id === id);
       if (found) {
@@ -66,13 +67,9 @@ const GroundDetails = () => {
       const response = await api.post("/bookings/book", payload);
       setBookingSuccess(response.data.message || "Ground booked successfully!");
 
-      // Refresh ground details to update availability
       await fetchGroundDetails();
-
-      // Reset form
       setBookingDate("");
 
-      // Navigate to my bookings after a delay
       setTimeout(() => {
         navigate("/my-bookings");
       }, 2000);
@@ -153,42 +150,45 @@ const GroundDetails = () => {
             </div>
           )}
 
-          <div className="booking-section">
-            <h3>Book This Ground</h3>
-            <form onSubmit={handleBooking} className="booking-form">
-              <div className="booking-form-group">
-                <label htmlFor="bookingDate">Select Date</label>
-                <input
-                  type="date"
-                  id="bookingDate"
-                  value={bookingDate}
-                  onChange={(e) => setBookingDate(e.target.value)}
-                  min={new Date().toISOString().split("T")[0]}
-                  required
+          {/* Conditionally render booking section for non-admins only */}
+          {!isAdmin && (
+            <div className="booking-section">
+              <h3>Book This Ground</h3>
+              <form onSubmit={handleBooking} className="booking-form">
+                <div className="booking-form-group">
+                  <label htmlFor="bookingDate">Select Date</label>
+                  <input
+                    type="date"
+                    id="bookingDate"
+                    value={bookingDate}
+                    onChange={(e) => setBookingDate(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]}
+                    required
+                    disabled={bookingLoading || ground.isBooked}
+                  />
+                </div>
+
+                {bookingError && (
+                  <div className="error-message">{bookingError}</div>
+                )}
+                {bookingSuccess && (
+                  <div className="success-message">{bookingSuccess}</div>
+                )}
+
+                <button
+                  type="submit"
+                  className="booking-submit-btn"
                   disabled={bookingLoading || ground.isBooked}
-                />
-              </div>
-
-              {bookingError && (
-                <div className="error-message">{bookingError}</div>
-              )}
-              {bookingSuccess && (
-                <div className="success-message">{bookingSuccess}</div>
-              )}
-
-              <button
-                type="submit"
-                className="booking-submit-btn"
-                disabled={bookingLoading || ground.isBooked}
-              >
-                {bookingLoading
-                  ? "Processing..."
-                  : ground.isBooked
-                    ? "Not Available"
-                    : "Confirm Booking"}
-              </button>
-            </form>
-          </div>
+                >
+                  {bookingLoading
+                    ? "Processing..."
+                    : ground.isBooked
+                      ? "Not Available"
+                      : "Confirm Booking"}
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </div>
     </div>
