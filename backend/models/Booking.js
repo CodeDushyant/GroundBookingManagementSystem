@@ -5,18 +5,15 @@ const bookingSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
 
     ground: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Ground",
-      required: true,
     },
 
     bookingDate: {
       type: Date,
-      required: true,
     },
 
     status: {
