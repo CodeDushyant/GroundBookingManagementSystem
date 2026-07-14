@@ -1,16 +1,49 @@
 const Booking = require("../models/Booking");
+const Ground = require("../models/Ground");
 
 // User Book Ground
 
 exports.bookGround = async (req, res) => {
   try {
+    const { userId, groundId, bookingDate } = req.body;
+
+    // Find Ground
+
+    const ground = await Ground.findById(groundId);
+
+    if (!ground) {
+      return res.status(404).json({
+        message: "Ground not found",
+      });
+    }
+
+    // Check already booked
+
+    if (ground.isBooked) {
+      return res.status(400).json({
+        message: "Ground already booked",
+      });
+    }
+
+    // Create Booking
+
     const booking = await Booking.create({
-      user: req.body.userId,
+      user: userId,
 
-      ground: req.body.groundId,
+      ground: groundId,
 
-      bookingDate: req.body.bookingDate,
+      bookingDate,
     });
+
+    // Update Ground Status
+
+    ground.isBooked = true;
+
+    ground.bookedBy = userId;
+
+    ground.bookingDate = bookingDate;
+
+    await ground.save();
 
     res.status(201).json({
       message: "Ground Booked Successfully",
@@ -30,7 +63,7 @@ exports.getUserBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({
       user: req.params.userId,
-    }).populate("ground");
+    }).populate("ground", "name location sportType price image");
 
     res.json(bookings);
   } catch (error) {
@@ -51,10 +84,10 @@ exports.getAdminBookings = async (req, res) => {
         match: {
           owner: req.params.adminId,
         },
-        select: "name location price",
+        select: "name location price image",
       });
 
-    // remove bookings of other admins
+    // Remove other admin bookings
 
     const adminBookings = bookings.filter((booking) => booking.ground !== null);
 

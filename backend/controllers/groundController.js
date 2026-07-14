@@ -4,10 +4,23 @@ const Ground = require("../models/Ground");
 
 exports.addGround = async (req, res) => {
   try {
-    const ground = await Ground.create(req.body);
+    const { name, location, sportType, price, owner, image } = req.body;
+
+    const ground = await Ground.create({
+      name,
+      location,
+      sportType,
+      price,
+      owner,
+
+      // if admin provides image use it else default image
+      image:
+        image || "https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d",
+    });
 
     res.status(201).json({
       message: "Ground Added Successfully",
+
       ground,
     });
   } catch (error) {
@@ -35,7 +48,13 @@ exports.getAllGrounds = async (req, res) => {
 
 exports.deleteGround = async (req, res) => {
   try {
-    await Ground.findByIdAndDelete(req.params.id);
+    const ground = await Ground.findByIdAndDelete(req.params.id);
+
+    if (!ground) {
+      return res.status(404).json({
+        message: "Ground not found",
+      });
+    }
 
     res.json({
       message: "Ground Deleted Successfully",

@@ -1,22 +1,33 @@
-// server.js
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
 
-const http = require("http");
+const connectDB = require("./config/db");
 
-const PORT = 5000;
+const app = express();
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, {
-    "Content-Type": "application/json",
-  });
+// Database Connection
 
-  res.end(
-    JSON.stringify({
-      message: "Server is running successfully 🚀",
-      status: "OK",
-    }),
-  );
+connectDB();
+
+app.use(cors());
+
+app.use(express.json());
+
+// Routes
+
+app.use("/api/users", require("./routes/userRoutes"));
+
+app.use("/api/grounds", require("./routes/groundRoutes"));
+
+app.use("/api/bookings", require("./routes/bookingRoutes"));
+
+app.get("/", (req, res) => {
+  res.send("Ground Management Backend Running");
 });
 
-server.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
