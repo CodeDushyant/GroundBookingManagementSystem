@@ -24,7 +24,7 @@ const Ground = new mongoose.Schema(
 
     image: {
       type: String,
-      default: "https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d",
+      default: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=800&q=80",
     },
 
     owner: {
