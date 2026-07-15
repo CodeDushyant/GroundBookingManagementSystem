@@ -16,13 +16,13 @@ import GroundDetails from "./components/GroundDetails";
 import MyBookings from "./components/MyBookings";
 import AdminDashboard from "./components/AdminDashboard";
 import Navbar from "./components/Navbar";
-
+import LandingPage from "./LandingPage";
 // Auth guard helper
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/landing-page" replace />;
   }
 
   if (adminOnly && user.role !== "admin") {
@@ -41,6 +41,7 @@ function App() {
           <Routes>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/landing-page" element={<LandingPage />} />
             <Route
               path="/"
               element={

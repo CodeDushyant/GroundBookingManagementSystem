@@ -1,8 +1,8 @@
-// src/api/axios.js
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://groundbookingmanagementsystem.onrender.com/api",
+  // Use import.meta.env for Vite, or process.env for Create React App
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
