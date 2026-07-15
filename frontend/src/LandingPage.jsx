@@ -53,7 +53,7 @@ const LandingPage = () => {
 
       {/* Features */}
       <section className="features" id="features">
-        <h2>Why Choose Us?</h2>
+        <h2 className="why">Why Choose Us?</h2>
         <div className="feature-grid">
           <div className="card">
             <h3>⚡ Instant Booking</h3>

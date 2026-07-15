@@ -190,3 +190,8 @@ body {
 .hero-buttons button:active {
   transform: scale(0.97);
 }
+
+.why {
+  margin-top: 30px;
+  margin-left: 30px;
+}
